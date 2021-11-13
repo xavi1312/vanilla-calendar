@@ -1,10 +1,12 @@
-import { getDaysInMonth, getMonthAndYear, isSameDate } from '../utils/dates'
+import { getDaysInMonth, getMonthAndYear, isSameDate, nextMonth, prevMonth } from '../utils/dates'
 import { h } from '../utils/utils'
 
 const userLang = window.navigator.language
 
 const SELECTOR_MONTH = '#calendar-month'
 const SELECTOR_BODY = '#calendar-body'
+const SELECTOR_BTN_PREV = '#calendar-prev'
+const SELECTOR_BTN_NEXT = '#calendar-next'
 class Calendar {
   /**
    * @param {string} locale
@@ -19,6 +21,7 @@ class Calendar {
     this.daySelected = null
 
     this.storeHTMLElements()
+    this.addEventListeners()
     this.init()
   }
 
@@ -27,9 +30,7 @@ class Calendar {
 
     const days = getDaysInMonth(this.date)
     const $days = this.getDOMDays(days)
-    $days.forEach(($day) => {
-      this.$calendarBody.appendChild($day)
-    })
+    this.appendDaysToBody($days)
   }
 
   storeHTMLElements () {
@@ -37,6 +38,15 @@ class Calendar {
     this.$calendarMonth = document.querySelector(SELECTOR_MONTH)
     /** @type {HTMLElement} */
     this.$calendarBody = document.querySelector(SELECTOR_BODY)
+    /** @type {HTMLElement} */
+    this.$calendarPrevMonthBtn = document.querySelector(SELECTOR_BTN_PREV)
+    /** @type {HTMLElement} */
+    this.$calendarNextMonthBtn = document.querySelector(SELECTOR_BTN_NEXT)
+  }
+
+  addEventListeners () {
+    this.$calendarPrevMonthBtn.addEventListener('click', this.onClickPrevMonth.bind(this))
+    this.$calendarNextMonthBtn.addEventListener('click', this.onClickNextMonth.bind(this))
   }
 
   /** @param {Date} date */
@@ -65,6 +75,24 @@ class Calendar {
     return $days
   }
 
+  onClickPrevMonth () {
+    console.log('prev ')
+
+    const newDate = prevMonth(this.date)
+
+    this.date = newDate
+    this.init()
+  }
+
+  onClickNextMonth () {
+    console.log('next month')
+
+    const newDate = nextMonth(this.date)
+
+    this.date = newDate
+    this.init()
+  }
+
   /**
    * @param {Event} ev
   */
@@ -78,6 +106,14 @@ class Calendar {
     this.daySelected.classList.add('calendar__day--selected')
 
     console.log(date)
+  }
+
+  /** @param {HTMLElement[]} $days */
+  appendDaysToBody ($days) {
+    this.$calendarBody.innerHTML = ''
+    $days.forEach(($day) => {
+      this.$calendarBody.appendChild($day)
+    })
   }
 }
 

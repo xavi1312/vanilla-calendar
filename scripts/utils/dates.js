@@ -41,7 +41,6 @@ function getDaysInMonth (date) {
 }
 
 /**
- *
  * @param {Date} date1
  * @param {Date} date2
  * @returns {boolean}
@@ -52,9 +51,41 @@ function isSameDate (date1, date2) {
     date1.getDate() === date2.getDate()
 }
 
+/**
+ * @param {Date} date
+ * @returns {Date}
+ */
+function prevMonth (date) {
+  const month = date.getMonth()
+  const year = date.getFullYear()
+
+  if (month === 0) {
+    return new Date(year - 1, 11)
+  }
+
+  return new Date(year, month - 1)
+}
+
+/**
+ * @param {Date} date
+ * @returns {Date}
+ */
+function nextMonth (date) {
+  const month = date.getMonth()
+  const year = date.getFullYear()
+
+  if (month === 11) {
+    return new Date(year + 1, 0)
+  }
+
+  return new Date(year, month + 1)
+}
+
 export {
   getMonthAndYear,
   getDaysInMonth,
   getNumOfDaysInMonth,
-  isSameDate
+  isSameDate,
+  prevMonth,
+  nextMonth
 }
