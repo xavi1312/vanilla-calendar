@@ -9,7 +9,8 @@ module.exports = {
     'plugin:cypress/recommended'
   ],
   plugins: [
-    'cypress'
+    'cypress',
+    'jest'
   ],
   parserOptions: {
     ecmaVersion: 12,

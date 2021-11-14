@@ -76,10 +76,10 @@ class Calendar {
       return $day
     })
 
-    const numberWeekDays = getWeekDayNumber(this.date)
+    const numberWeekDays = getWeekDayNumber(new Date(this.date.getFullYear(), this.date.getMonth(), 1))
     const $daysPrevMonth = Array
       .from({length: numberWeekDays})
-      .map((_, index) => h('span', {
+      .map(() => h('span', {
         class: 'caledar__day'
       }, ''))
 

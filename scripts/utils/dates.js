@@ -89,7 +89,7 @@ function getWeekDayNumber(date) {
   const month = date.getMonth()
   const year = date.getFullYear()
 
-  const firstDayOfMonth = new Date(year, month, 1).getDay()
+  const firstDayOfMonth = date.getDay()
 
   return firstDayOfMonth === 0 ? 6 : firstDayOfMonth - 1
 }
