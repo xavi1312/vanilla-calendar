@@ -1,4 +1,4 @@
-import { getDaysInMonth, getMonthAndYear, isSameDate, nextMonth, prevMonth } from '../utils/dates'
+import { getDaysInMonth, getMonthAndYear, getWeekDayNumber, isSameDate, nextMonth, prevMonth } from '../utils/dates'
 import { h } from '../utils/utils'
 
 const userLang = window.navigator.language
@@ -13,9 +13,13 @@ class Calendar {
    * @param {Date[]} daysUnaivalable
   */
   constructor (locale = userLang, daysUnaivalable = []) {
+    /** @type {string} */
     this.locale = locale
+    /** @type {Date} */
+    this.startDate = new Date()
+    /** @type {Date} */
     this.date = new Date()
-    /** @type {Date[]} daysUnaivalable */
+    /** @type {Date[]} */
     this.daysUnaivalable = daysUnaivalable
     /** @type {HTMLElement|null} */
     this.daySelected = null
@@ -72,12 +76,17 @@ class Calendar {
       return $day
     })
 
-    return $days
+    const numberWeekDays = getWeekDayNumber(this.date)
+    const $daysPrevMonth = Array
+      .from({length: numberWeekDays})
+      .map((_, index) => h('span', {
+        class: 'caledar__day'
+      }, ''))
+
+    return $daysPrevMonth.concat($days)
   }
 
   onClickPrevMonth () {
-    console.log('prev ')
-
     const newDate = prevMonth(this.date)
 
     this.date = newDate
@@ -85,8 +94,6 @@ class Calendar {
   }
 
   onClickNextMonth () {
-    console.log('next month')
-
     const newDate = nextMonth(this.date)
 
     this.date = newDate
@@ -97,11 +104,11 @@ class Calendar {
    * @param {Event} ev
   */
   onClickDay (ev) {
-    this.daySelected?.classList.remove('calendar__day--selected')
     /** @type {HTMLElement} */
     const $day = ev.target
     const date = $day.getAttribute('data-date')
-
+    
+    this.daySelected?.classList.remove('calendar__day--selected')
     this.daySelected = $day
     this.daySelected.classList.add('calendar__day--selected')
 

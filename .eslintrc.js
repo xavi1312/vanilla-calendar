@@ -5,7 +5,8 @@ module.exports = {
     'cypress/global': true
   },
   extends: [
-    'standard'
+    'standard',
+    'plugin:cypress/recommended'
   ],
   plugins: [
     'cypress'

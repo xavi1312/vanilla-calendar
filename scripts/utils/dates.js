@@ -11,8 +11,8 @@ function getMonthAndYear (locale, date) {
 }
 
 /**
- *  @parem {number} month
- *  @parem {number} year
+ *  @param {number} month
+ *  @param {number} year
  *  @returns {number}
 */
 function getNumOfDaysInMonth (month, year) {
@@ -20,7 +20,7 @@ function getNumOfDaysInMonth (month, year) {
 }
 
 /**
- *  @parem {Date} date
+ *  @param {Date} date
  * @return {{day: number, date: Date}[]}
 */
 function getDaysInMonth (date) {
@@ -81,11 +81,25 @@ function nextMonth (date) {
   return new Date(year, month + 1)
 }
 
+/**
+ * @param {Date} date 
+ * @returns {number} 0 to 6 (monday to sunday)
+ */
+function getWeekDayNumber(date) {
+  const month = date.getMonth()
+  const year = date.getFullYear()
+
+  const firstDayOfMonth = new Date(year, month, 1).getDay()
+
+  return firstDayOfMonth === 0 ? 6 : firstDayOfMonth - 1
+}
+
 export {
   getMonthAndYear,
   getDaysInMonth,
   getNumOfDaysInMonth,
   isSameDate,
   prevMonth,
-  nextMonth
+  nextMonth,
+  getWeekDayNumber
 }
