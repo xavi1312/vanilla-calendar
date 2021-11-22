@@ -9,4 +9,7 @@ const disabledDays = [
   new Date(CURRENT_YEAR, CURRENT_MONTH, 10),
   new Date(CURRENT_YEAR, CURRENT_MONTH, 15),
 ]
-const calendar = new Calendar('ca', disabledDays)
+const calendar = new Calendar({
+  lang: 'ca',
+  datesUnaivalable: disabledDays
+})

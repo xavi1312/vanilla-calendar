@@ -1,26 +1,32 @@
 import { getDaysInMonth, getMonthAndYear, getWeekDayNumber, isSameDate, nextMonth, prevMonth } from '../utils/dates'
 import { h } from '../utils/utils'
 
-const userLang = window.navigator.language
+/** @typedef {import('../interfaces/settings').Settings} Settings */
 
-const SELECTOR_MONTH = '#calendar-month'
-const SELECTOR_BODY = '#calendar-body'
-const SELECTOR_BTN_PREV = '#calendar-prev'
-const SELECTOR_BTN_NEXT = '#calendar-next'
+/** @param {Settings} Settings */
+const defaultSettings = {
+  lang: window.navigator.language,
+  datesUnaivalable: [],
+  startDate: new Date,
+  selectors: {
+    month: '#calendar-month',
+    body: '#calendar-body',
+    btnPrev: '#calendar-prev',
+    btnNext: '#calendar-next',
+  }
+}
+
 class Calendar {
-  /**
-   * @param {string} locale
-   * @param {Date[]} daysUnaivalable
-  */
-  constructor (locale = userLang, daysUnaivalable = []) {
-    /** @type {string} */
-    this.locale = locale
-    /** @type {Date} */
-    this.startDate = new Date()
+  /** @param {Settings} settings */
+  constructor (settings) {
+    /** @type {Settings} */
+    this.settings = { 
+      ...defaultSettings, 
+      ...settings 
+    }
+    
     /** @type {Date} */
     this.date = new Date()
-    /** @type {Date[]} */
-    this.daysUnaivalable = daysUnaivalable
     /** @type {HTMLElement|null} */
     this.daySelected = null
 
@@ -39,13 +45,13 @@ class Calendar {
 
   storeHTMLElements () {
     /** @type {HTMLElement} */
-    this.$calendarMonth = document.querySelector(SELECTOR_MONTH)
+    this.$calendarMonth = document.querySelector(this.settings.selectors.month)
     /** @type {HTMLElement} */
-    this.$calendarBody = document.querySelector(SELECTOR_BODY)
+    this.$calendarBody = document.querySelector(this.settings.selectors.body)
     /** @type {HTMLElement} */
-    this.$calendarPrevMonthBtn = document.querySelector(SELECTOR_BTN_PREV)
+    this.$calendarPrevMonthBtn = document.querySelector(this.settings.selectors.btnPrev)
     /** @type {HTMLElement} */
-    this.$calendarNextMonthBtn = document.querySelector(SELECTOR_BTN_NEXT)
+    this.$calendarNextMonthBtn = document.querySelector(this.settings.selectors.btnNext)
   }
 
   addEventListeners () {
@@ -55,7 +61,7 @@ class Calendar {
 
   /** @param {Date} date */
   setMonthToHeader (date) {
-    this.$calendarMonth.innerText = getMonthAndYear(this.locale, date)
+    this.$calendarMonth.innerText = getMonthAndYear(this.settings.lang, date)
   }
 
   /**
@@ -64,7 +70,7 @@ class Calendar {
   */
   getDOMDays (days) {
     const $days = days.map((day) => {
-      const isDayDisabled = this.daysUnaivalable.some((unaivalableDate) => isSameDate(unaivalableDate, day.date))
+      const isDayDisabled = this.settings.datesUnaivalable.some((unaivalableDate) => isSameDate(unaivalableDate, day.date))
 
       const $day = h('span', {
         'data-date': day.date,
